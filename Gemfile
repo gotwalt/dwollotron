@@ -40,4 +40,5 @@ group :test do
   gem "autotest-growl"
   gem "autotest-fsevent"
   gem 'simplecov', :require => false
+  gem 'timecop'
 end

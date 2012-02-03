@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120202225036) do
+ActiveRecord::Schema.define(:version => 20120203164305) do
+
+  create_table "account_amounts", :force => true do |t|
+    t.integer  "account_id"
+    t.datetime "active_at"
+    t.float    "amount"
+  end
+
+  add_index "account_amounts", ["account_id", "active_at"], :name => "index_account_amounts_on_account_id_and_active_at"
 
   create_table "accounts", :force => true do |t|
     t.string   "access_token", :null => false
