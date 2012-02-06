@@ -12,4 +12,13 @@ class Account < ActiveRecord::Base
     raise ArgumentError unless val.is_a?(Time)
     scheduled_amounts.effective_at(val).first
   end
+
+  def current_withdrawal
+    scheduled_withdrawal_at Time.now
+  end
+  
+  def scheduled_withdrawal_at(val)
+    raise ArgumentError unless val.is_a?(Time)
+    scheduled_withdrawals.effective_at(val).first
+  end
 end
