@@ -8,6 +8,12 @@ gem 'yajl-ruby'
 gem 'pg'
 gem 'redis'
 
+# UI
+gem 'twitter-bootstrap-rails', :group => :assets
+gem 'haml'
+gem 'jquery-rails'
+gem 'barista'
+
 # Tasks
 gem 'resque'
 

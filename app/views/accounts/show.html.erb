@@ -1,0 +1,15 @@
+
+<label class="label"><%= t("activerecord.attributes.account.access_token", :default => t("activerecord.labels.access_token", :default => "Access token")) %>:</label>
+<p><%= @account.access_token %></p>
+
+<label class="label"><%= t("activerecord.attributes.account.pin", :default => t("activerecord.labels.pin", :default => "Pin")) %>:</label>
+<p><%= @account.pin %></p>
+
+<label class="label"><%= t("activerecord.attributes.account.processed_at", :default => t("activerecord.labels.processed_at", :default => "Processed at")) %>:</label>
+<p><%= @account.processed_at %></p>
+
+<div class="form-actions">
+<%= link_to "Back", accounts_path, :class => 'btn'  %>
+<%= link_to "Edit", edit_account_path(@account), :class => 'btn' %>
+<%= link_to "Delete", account_path(@account), :method => "delete", :confirm => "#{t("web-app-theme.confirm", :default => "Are you sure?")}", :class => 'btn' %>
+</div>

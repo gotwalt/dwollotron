@@ -1,0 +1,30 @@
+<h1>Accounts</h1>
+<table class="table table-striped">
+ <thead>
+  <tr>
+    <th>ID</th>
+        <th>
+      <%= t("activerecord.attributes.account.access_token", :default => t("activerecord.labels.access_token", :default => "Access_token")) %>
+    </th>
+        <th>Created at</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @accounts.each do |account| -%>
+   <tr>
+    <td><%= account.id %></td>
+        <td><%= link_to account.access_token, account_path(account) %>
+    </td>
+        <td><%= account.created_at %></td>
+    <td>
+      <%= link_to "Show", account_path(account) %>
+      <%= link_to "Edit", edit_account_path(account) %>
+      <%= link_to "Destroy", account_path(account), :method => :delete, :confirm => "#{t("web-app-theme.confirm", :default => "Are you sure?")}" %>
+    </td>
+    </tr>
+    <% end -%>
+   </tbody>
+</table>
+
+<%= link_to "New", new_account_path, :class => 'btn btn-primary' %>
