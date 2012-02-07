@@ -14,10 +14,32 @@
 ActiveRecord::Schema.define(:version => 20120203203822) do
 
   create_table "accounts", :force => true do |t|
-    t.string   "access_token", :null => false
-    t.string   "pin"
-    t.datetime "processed_at"
+    t.string  "access_token",       :null => false
+    t.string  "pin"
+    t.integer "current_payment_id"
+    t.string  "state"
   end
+
+  create_table "payment_events", :force => true do |t|
+    t.integer  "payment_id"
+    t.datetime "created_at"
+    t.string   "from_state"
+    t.string   "to_state"
+    t.string   "remote_transaction_id"
+    t.text     "raw_response"
+  end
+
+  add_index "payment_events", ["payment_id"], :name => "index_payment_events_on_payment_id"
+
+  create_table "payments", :force => true do |t|
+    t.integer  "account_id"
+    t.datetime "effective_at"
+    t.datetime "started_at"
+    t.string   "state"
+    t.datetime "completed_at"
+  end
+
+  add_index "payments", ["account_id", "started_at"], :name => "index_payments_on_account_id_and_started_at"
 
   create_table "scheduled_amounts", :force => true do |t|
     t.integer  "account_id"
@@ -34,16 +56,5 @@ ActiveRecord::Schema.define(:version => 20120203203822) do
   end
 
   add_index "scheduled_withdrawals", ["account_id", "effective_at"], :name => "index_scheduled_withdrawals_on_account_id_and_effective_at"
-
-  create_table "transaction_logs", :force => true do |t|
-    t.integer  "account_id"
-    t.datetime "started_at"
-    t.datetime "completed_at"
-    t.string   "remote_transaction_id"
-    t.text     "raw_response"
-    t.boolean  "is_successful",         :default => true
-  end
-
-  add_index "transaction_logs", ["account_id", "started_at"], :name => "index_transaction_logs_on_account_id_and_started_at"
 
 end

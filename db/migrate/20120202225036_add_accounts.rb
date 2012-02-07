@@ -3,7 +3,8 @@ class AddAccounts < ActiveRecord::Migration
     create_table :accounts do |t|
       t.string   :access_token, :null => false
       t.string   :pin
-      t.datetime :processed_at
+      t.integer  :current_payment_id
+      t.string   :state
     end
   end
 

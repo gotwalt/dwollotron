@@ -15,7 +15,8 @@ gem 'jquery-rails'
 gem 'barista'
 
 # Tasks
-gem 'resque'
+gem 'state_machine'
+#gem 'resque'
 
 # Remote data
 gem 'typhoeus'
