@@ -142,7 +142,6 @@ describe Account do
   end
   
   describe '#current_amount' do
-    
     before do
       subject = double("account")
     end
@@ -154,4 +153,18 @@ describe Account do
       end
     end
   end
+  
+  describe '#current_withdrawal' do
+    before do
+      subject = double("account")
+    end
+    
+    it 'should call #amount_at with the current time' do
+      Timecop.freeze do
+        subject.should_receive(:scheduled_withdrawal_at).with(Time.now)
+        subject.current_withdrawal
+      end
+    end
+  end
+  
 end
