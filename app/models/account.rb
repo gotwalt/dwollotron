@@ -29,4 +29,25 @@ class Account < ActiveRecord::Base
     return nil if current_payment_id.nil?
     @current_payment ||= Payment.find(current_payment_id)
   end
+  
+  private
+
+  def create_new_payment(args = nil)
+    raise ArgumentError unless self.current_payment_id.nil?
+    payment = Payment.create!(:account_id => self.id, :started_at => Time.now, :effective_at => Time.now)
+    self.update_attributes!(:current_payment_id => payment.id)
+  end
+  
+  def update_account_record(args = nil)
+    raise ArgumentError if current_payment.nil?# || current_payment.state != :completed
+    self.update_attributes!(:current_payment_id => nil)
+    finalize_records!
+  end
+  
+  def cancel_current_payment(args = nil)
+    raise ArgumentError if current_payment_id.nil?
+    current_payment.cancel!
+    self.update_attributes!(:current_payment_id => nil)
+  end
+  
 end

@@ -19,38 +19,14 @@ module AccountStateMachine
       end
 
       event :handle_error do
-        transition all => :error
+        transition all - :waiting => :error
       end
 
       event :recover_from_error do
         transition :error => :waiting
       end
 
-      state :waiting do
-        def create_new_payment(args = nil)
-          raise ArgumentError unless self.current_payment_id.nil?
-          payment = Payment.create!(:account_id => self.id, :started_at => Time.now, :effective_at => Time.now)
-          self.update_attributes!(:current_payment_id => payment.id)
-        end
-      end
-
-      state :finalize do
-        def update_account_record(args = nil)
-          raise ArgumentError if current_payment.nil?# || current_payment.state != :completed
-          self.update_attributes!(:current_payment_id => nil)
-          finalize_records!
-        end
-      end
-
-      state :error do
-        def cancel_current_payment(args = nil)
-          raise ArgumentError if current_payment_id.nil?
-          current_payment.cancel!
-          self.update_attributes!(:current_payment_id => nil)
-        end
-      end
-    end
-    
+    end    
   end
   
 end
