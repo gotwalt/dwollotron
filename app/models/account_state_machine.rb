@@ -19,14 +19,15 @@ module AccountStateMachine
       end
 
       event :handle_error do
-        transition all - :waiting => :error
+        transition all - [:waiting, :error] => :error
       end
 
       event :recover_from_error do
         transition :error => :waiting
       end
 
-    end    
+    end
+
   end
   
 end
