@@ -37,6 +37,7 @@ describe Payment do
   describe '#call_remote_dwolla_api' do
     before do
       subject.state = "processing"
+      subject.stub(:has_existing_payments_in_the_same_effective_month?) { false }
     end
     
     it 'should raise an InvalidStateError unless the state machine is correct' do
@@ -44,6 +45,13 @@ describe Payment do
         subject.state = "queued"
         subject.call_remote_dwolla_api
       end.should raise_error(Payment::InvalidStateError)
+    end
+    
+    it "should call handle_duplicate! if there's a duplicate" do
+      subject.stub(:has_existing_payments_in_the_same_effective_month?) { true }
+      subject.stub(:handle_duplicate!) { true }
+      subject.should_receive(:handle_duplicate!)
+      subject.call_remote_dwolla_api
     end
     
     it 'should call the remote Dwolla api and update itself' do
@@ -102,6 +110,21 @@ describe Payment do
       subject.account.should_receive(:handle_error!)
       subject.set_account_error
     end
+  end
+  
+  
+  
+  describe '#has_existing_payments_in_the_same_effective_month?' do
+    it 'should return false with only one payment' do
+      subject.should_not be_has_existing_payments_in_the_same_effective_month
+    end
+    
+    it "should return true when there's a second one" do
+      subject.update_attributes(:state => "completed")
+      invalid_subject = FactoryGirl.build(:payment, :account => subject.account)
+      invalid_subject.should be_has_existing_payments_in_the_same_effective_month
+    end
+    
   end
 
 end

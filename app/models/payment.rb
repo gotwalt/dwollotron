@@ -21,8 +21,15 @@ class Payment < ActiveRecord::Base
     event
   end
   
+  def has_existing_payments_in_the_same_effective_month?
+    account.payments.where("effective_at >= ? and effective_at <= ? and state = ?", effective_at.getgm.beginning_of_month, effective_at.getgm.end_of_month, :completed).count > 0
+  end
+  
   def call_remote_dwolla_api(args=nil)
     raise InvalidStateError unless self.processing?
+    
+    return handle_duplicate! if has_existing_payments_in_the_same_effective_month?
+    
     begin
       amount = account.scheduled_amount_at(effective_at).amount
       # call the dwolla api
@@ -32,6 +39,11 @@ class Payment < ActiveRecord::Base
       handle_error!
     end
   end
+  
+  def cancel_duplicate(args=nil)
+    raise InvalidStateError unless self.duplicate?
+    account.cancel_transaction!
+  end 
   
   def complete_records(args=nil)
     raise InvalidStateError unless self.completed?

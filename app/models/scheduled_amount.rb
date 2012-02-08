@@ -11,7 +11,7 @@ class ScheduledAmount < ActiveRecord::Base
     one_day = 60 * 60 * 24
     ScheduledAmount.where("account_id = ? and effective_at > ? and effective_at < ?", account_id, effective_at - one_day, effective_at + one_day).each do |existing_amount|
       if effective_at.to_date == existing_amount.effective_at.to_date and existing_amount.id != self.id
-        errors.add(:effective_at, "can't be on the same day as another AccountAmount for a given user") 
+        errors.add(:effective_at, "can't be on the same day as another ScheduledAmount for a given user") 
       end
     end
   end
