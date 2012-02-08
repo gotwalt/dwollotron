@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20120203203822) do
     t.string   "to_state"
     t.string   "remote_transaction_id"
     t.text     "raw_response"
-    t.text     "exception"
+    t.text     "error"
   end
 
   add_index "payment_events", ["payment_id"], :name => "index_payment_events_on_payment_id"

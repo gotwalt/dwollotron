@@ -3,5 +3,5 @@ class PaymentEvent < ActiveRecord::Base
   
   validates_presence_of :payment_id, :created_at, :from_state, :to_state
   
-  serialize :exception, Yaml
+  serialize :error, YAML
 end

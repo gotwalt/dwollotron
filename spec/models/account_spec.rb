@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe Account do
   subject { FactoryGirl.create(:account) }
+  
+  describe "state machine" do
+    it 'should be in waiting state by default' do
+      subject.state_name.should == :waiting
+    end
+  end
+  
 
   describe '#scheduled_amount_at' do
     let(:too_little) { FactoryGirl.create(:scheduled_amount, :account=> subject, :effective_at => 10.days.ago) }
