@@ -3,13 +3,96 @@ require 'spec_helper'
 describe Account do
   subject { FactoryGirl.create(:account) }
   
-  describe "state machine" do
-    it 'should be in waiting state by default' do
-      subject.state_name.should == :waiting
+  describe '#create_new_payment' do
+    it 'should raise an InvalidStateError unless the state machine is correct' do
+      lambda do
+        subject.state = "queued"
+        subject.create_new_payment
+      end.should raise_error(Account::InvalidStateError)
+    end
+    
+    it 'should raise an ArgumentError if there is a current_payment_id' do
+      lambda do
+        subject.current_payment_id = 1
+        subject.create_new_payment
+      end.should raise_error(ArgumentError)
+    end
+    
+    it 'should create a payment record and update itself' do
+      
+      Timecop.freeze(Time.now) do
+        subject.create_new_payment
+        subject.current_payment_id.should_not be_nil
+        payment = Payment.find(subject.current_payment_id)
+      
+        payment.account_id.should == subject.id
+        payment.started_at.should == Time.now
+        payment.effective_at.should == Time.now
+      end
+      
     end
   end
   
-
+  describe '#update_account_record' do
+    before do
+      subject.queue
+      subject.state = "transaction_completed"
+    end
+    
+    it 'should raise an InvalidStateError unless the state machine is correct' do
+      lambda do
+        subject.state = "queued"
+        subject.update_account_record
+      end.should raise_error(Account::InvalidStateError)
+    end
+    
+    it 'should raise an ArgumentError unless there is a current_payment_id' do
+      lambda do
+        subject.current_payment_id = nil
+        subject.update_account_record
+      end.should raise_error(ArgumentError)
+    end
+    
+    it "should set the current_payment_id to nil because we're done with it" do
+      subject.update_account_record
+      subject.current_payment_id.should be_nil
+      subject.current_payment.should be_nil
+      subject.should_not be_changed
+    end
+    
+  end
+  
+  describe '#cancel_current_payment' do
+    before do
+      subject.queue
+      subject.state = "error"
+      subject.current_payment.stub(:cancel!) { true }
+    end
+    
+    it 'should raise an InvalidStateError unless the state machine is correct' do
+      lambda do
+        subject.state = "queued"
+        subject.cancel_current_payment
+      end.should raise_error(Account::InvalidStateError)
+    end
+    
+    it 'should raise an ArgumentError unless there is a current_payment_id' do
+      lambda do
+        subject.current_payment_id = nil
+        subject.cancel_current_payment
+      end.should raise_error(ArgumentError)
+    end
+    
+    it "should set the current_payment_id to nil because we're done with it" do
+      subject.current_payment.should_receive(:cancel!)
+      subject.cancel_current_payment
+      subject.current_payment_id.should be_nil
+      subject.current_payment.should be_nil
+      subject.should_not be_changed
+    end
+    
+  end
+  
   describe '#scheduled_amount_at' do
     let(:too_little) { FactoryGirl.create(:scheduled_amount, :account=> subject, :effective_at => 10.days.ago) }
     let(:too_big) { FactoryGirl.create(:scheduled_amount, :account=> subject, :effective_at => 10.days.from_now) }

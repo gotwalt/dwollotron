@@ -41,6 +41,7 @@ class Account < ActiveRecord::Base
     raise InvalidStateError unless self.transaction_completed?
     raise ArgumentError if current_payment.nil?# || current_payment.state != :completed
     self.update_attributes!(:current_payment_id => nil)
+    @current_payment = nil
     finalize_records!
   end
   
