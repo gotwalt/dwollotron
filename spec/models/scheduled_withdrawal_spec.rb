@@ -26,9 +26,7 @@ describe ScheduledWithdrawal do
     
     it 'should allow addition of ScheduledWithdrawals if the effective_at is at least in next month' do
       new_rule = FactoryGirl.build(:scheduled_withdrawal, :account => account, :effective_at => Time.now.at_beginning_of_month.next_month)
-      p new_rule.inspect
       new_rule.valid?
-      p new_rule.errors.full_messages.to_sentence
       new_rule.should be_valid
     end
   
@@ -38,7 +36,6 @@ describe ScheduledWithdrawal do
     end
   
     it 'should not allow addition of ScheduledWithdrawals if the effective_at is in the current month' do
-      p subject.inspect
       new_rule = FactoryGirl.build(:scheduled_withdrawal, :account => account, :effective_at => Time.now.getgm.end_of_month)
       new_rule.should_not be_valid
     end

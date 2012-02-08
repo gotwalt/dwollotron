@@ -16,7 +16,7 @@ module PaymentStateMachine
       end
 
       event :handle_error do
-        transition all => :error
+        transition all - [:queued, :error] => :error
       end
 
       event :cancel do

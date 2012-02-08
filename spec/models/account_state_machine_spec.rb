@@ -23,20 +23,7 @@ describe AccountStateMachine do
       subject.finalize_records.should == true
       subject.should be_waiting
     end
-    
-    it "can't do anything else" do
-      valid_paths = [:handle_error, :finalize_records]
-      paths = subject.state_paths.events - valid_paths
-      paths.each do |path|
-        lambda do
-          subject.send("#{path}!".to_sym)
-        end.should raise_error(StateMachine::InvalidTransition)
-        subject.should be_transaction_completed
-      end
-    end
-    
   end
-  
   
   
   describe 'error state' do
@@ -49,18 +36,6 @@ describe AccountStateMachine do
       subject.recover_from_error.should == true
       subject.should be_waiting
     end
-    
-    it "can't do anything else" do
-      valid_paths = [:recover_from_error]
-      paths = subject.state_paths.events - valid_paths
-      paths.each do |path|
-        lambda do
-          subject.send("#{path}!".to_sym)
-        end.should raise_error(StateMachine::InvalidTransition)
-        subject.should be_error
-      end
-    end
-    
   end
   
   
@@ -75,17 +50,6 @@ describe AccountStateMachine do
       subject.should be_transaction_completed
     end
     
-    it "can't do anything else" do
-      valid_paths = [:handle_error, :complete_transaction]
-      paths = subject.state_paths.events - valid_paths
-      paths.each do |path|
-        lambda do
-          subject.send("#{path}!".to_sym)
-        end.should raise_error(StateMachine::InvalidTransition)
-        subject.should be_queued
-      end
-    end
-    
     it "can go to the error state" do
       subject.handle_error.should == true
       subject.should be_error
@@ -93,21 +57,14 @@ describe AccountStateMachine do
   end
   
   describe 'waiting state' do
+    it 'should be waiting by default' do
+      subject.should be_waiting
+    end
+    
     it 'can queue' do
       subject.should_receive(:create_new_payment)
       subject.queue.should == true
       subject.should be_queued
-    end
-
-    it "can't do anything else" do
-      valid_paths = [:queue]
-      paths = subject.state_paths.events - valid_paths
-      paths.each do |path|
-        lambda do
-          subject.send("#{path}!".to_sym)
-        end.should raise_error(StateMachine::InvalidTransition)
-        subject.should be_waiting
-      end
     end
     
   end
