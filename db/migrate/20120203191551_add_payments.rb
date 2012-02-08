@@ -15,6 +15,7 @@ class AddPayments < ActiveRecord::Migration
       t.string   :to_state, :nil => false
       t.string   :remote_transaction_id
       t.text     :raw_response
+      t.text     :exception
     end
     
     add_index :payments, [:account_id, :started_at]
