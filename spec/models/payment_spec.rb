@@ -82,9 +82,9 @@ describe Payment do
       end.should raise_error(Payment::InvalidStateError)
     end
     
-    it 'should update completed_at and call the account complete_transaction!' do
-      subject.account.stub(:complete_transaction!) { true }
-      subject.account.should_receive(:complete_transaction!)
+    it 'should update completed_at and call the account complete_payment!' do
+      subject.account.stub(:complete_payment!) { true }
+      subject.account.should_receive(:complete_payment!)
       Timecop.freeze(Time.now) do
         subject.complete_records
         subject.completed_at.should == Time.now
@@ -105,10 +105,10 @@ describe Payment do
       end.should raise_error(Payment::InvalidStateError)
     end
     
-    it 'should update completed_at and call the account complete_transaction!' do
-      subject.account.stub(:cancel_transaction!) { true }
-      subject.account.should_receive(:cancel_transaction!)
-      subject.cancel_duplicate == true
+    it 'should call the account cancel_payment!' do
+      subject.account.stub(:cancel_payment!) { true }
+      subject.account.should_receive(:cancel_payment!)
+      subject.cancel_duplicate
     end
   end
   

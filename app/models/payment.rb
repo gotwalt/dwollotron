@@ -42,13 +42,13 @@ class Payment < ActiveRecord::Base
   
   def cancel_duplicate(args=nil)
     raise InvalidStateError unless self.duplicate?
-    account.cancel_transaction!
+    account.cancel_payment!
   end 
   
   def complete_records(args=nil)
     raise InvalidStateError unless self.completed?
     update_attributes(:completed_at => Time.now)
-    account.complete_transaction!
+    account.complete_payment!
   end
   
   def set_account_error(args=nil)

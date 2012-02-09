@@ -38,7 +38,7 @@ class Account < ActiveRecord::Base
   end
   
   def update_account_record(args = nil)
-    raise InvalidStateError unless self.transaction_completed?
+    raise InvalidStateError unless self.payment_completed?
     raise ArgumentError if current_payment.nil?# || current_payment.state != :completed
     self.update_attributes!(:current_payment_id => nil)
     @current_payment = nil
@@ -46,13 +46,29 @@ class Account < ActiveRecord::Base
   end
   
   def cancel_current_payment(args = nil)
+    raise InvalidStateError if self.waiting?
+    destroy_current_payment
+    reset_after_cancel
+  end
+  
+  def reset_payments_after_error(args = nil)
     raise InvalidStateError unless self.error?
-    raise ArgumentError if current_payment_id.nil?
-    current_payment.cancel!
-    self.update_attributes!(:current_payment_id => nil)
+    destroy_current_payment
+  end
+  
+  def enqueue_payment(args = nil)
+    Resque.enqueue(PaymentProcessor, current_payment.id)
   end
   
   class InvalidStateError < StandardError
+  end
+  
+  private
+  
+  def destroy_current_payment
+    current_payment.cancel! if current_payment.present?
+    self.update_attributes!(:current_payment_id => nil)
+    @current_payment = nil
   end
   
 end

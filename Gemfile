@@ -16,7 +16,7 @@ gem 'barista'
 
 # Tasks
 gem 'state_machine'
-#gem 'resque'
+gem 'resque'
 
 # Remote data
 gem 'typhoeus'

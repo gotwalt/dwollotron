@@ -36,7 +36,7 @@ describe Account do
   describe '#update_account_record' do
     before do
       subject.queue
-      subject.state = "transaction_completed"
+      subject.state = "payment_completed"
     end
     
     it 'should raise an InvalidStateError unless the state machine is correct' do
@@ -71,16 +71,9 @@ describe Account do
     
     it 'should raise an InvalidStateError unless the state machine is correct' do
       lambda do
-        subject.state = "queued"
+        subject.state = "waiting"
         subject.cancel_current_payment
       end.should raise_error(Account::InvalidStateError)
-    end
-    
-    it 'should raise an ArgumentError unless there is a current_payment_id' do
-      lambda do
-        subject.current_payment_id = nil
-        subject.cancel_current_payment
-      end.should raise_error(ArgumentError)
     end
     
     it "should set the current_payment_id to nil because we're done with it" do
