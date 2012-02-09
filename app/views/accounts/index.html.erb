@@ -6,7 +6,6 @@
         <th>
       <%= t("activerecord.attributes.account.access_token", :default => t("activerecord.labels.access_token", :default => "Access_token")) %>
     </th>
-        <th>Created at</th>
     <th>Actions</th>
   </tr>
   </thead>
@@ -16,7 +15,6 @@
     <td><%= account.id %></td>
         <td><%= link_to account.access_token, account_path(account) %>
     </td>
-        <td><%= account.created_at %></td>
     <td>
       <%= link_to "Show", account_path(account) %>
       <%= link_to "Edit", edit_account_path(account) %>

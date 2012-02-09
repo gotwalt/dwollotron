@@ -42,7 +42,7 @@ class Payment < ActiveRecord::Base
   
   def cancel_duplicate(args=nil)
     raise InvalidStateError unless self.duplicate?
-    account.cancel_payment!
+    account.cancel_current_payment
   end 
   
   def complete_records(args=nil)

@@ -17,6 +17,8 @@ gem 'barista'
 # Tasks
 gem 'state_machine'
 gem 'resque'
+gem 'resque-scheduler'
+gem 'foreman'
 
 # Remote data
 gem 'typhoeus'
@@ -25,9 +27,7 @@ gem 'typhoeus'
 gem 'heroku'
 
 # Heroku needs
-group :production do
-  gem 'thin'
-end
+gem 'thin'
 
 # Misc
 gem "git_remote_branch"
