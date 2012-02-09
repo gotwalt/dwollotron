@@ -93,6 +93,25 @@ describe Payment do
     end
   end
   
+  describe '#cancel_duplicate' do
+    before do
+      subject.state = "duplicate"
+    end
+    
+    it 'should raise an InvalidStateError unless the state machine is correct' do
+      lambda do
+        subject.state = "queued"
+        subject.cancel_duplicate
+      end.should raise_error(Payment::InvalidStateError)
+    end
+    
+    it 'should update completed_at and call the account complete_transaction!' do
+      subject.account.stub(:cancel_transaction!) { true }
+      subject.account.should_receive(:cancel_transaction!)
+      subject.cancel_duplicate == true
+    end
+  end
+  
   describe '#set_account_error' do
     before do
       subject.state = "error"

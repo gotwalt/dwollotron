@@ -33,7 +33,7 @@ describe PaymentStateMachine do
     
   end
   
-  describe 'waiting state' do
+  describe 'processing state' do
     before do
       subject.state = "processing"
     end
@@ -47,6 +47,12 @@ describe PaymentStateMachine do
       subject.should_receive(:complete_records)
       subject.complete.should == true
       subject.should be_completed
+    end
+    
+    it 'can be a duplicate' do
+      subject.should_receive(:cancel_duplicate)
+      subject.handle_duplicate.should == true
+      subject.should be_duplicate
     end
     
   end
