@@ -1,3 +1,0 @@
-class AccountLoader
-  
-end
