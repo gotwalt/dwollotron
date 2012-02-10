@@ -106,8 +106,8 @@ describe Payment do
     end
     
     it 'should call the account cancel_payment!' do
-      subject.account.stub(:cancel_payment!) { true }
-      subject.account.should_receive(:cancel_payment!)
+      subject.account.stub(:cancel_current_payment) { true }
+      subject.account.should_receive(:cancel_current_payment)
       subject.cancel_duplicate
     end
   end

@@ -4,6 +4,9 @@ source "http://rubygems.org"
 gem 'rails'
 gem 'yajl-ruby'
 
+# Dwolla
+gem 'dwolla'
+
 # Data
 gem 'pg'
 gem 'redis'
