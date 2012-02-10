@@ -1,0 +1,65 @@
+%h1 Payment Details
+
+%dl
+  %dt
+    =@payment.id
+  %dd ID
+
+%dl
+  %dt
+    =@payment.account.id
+  %dd Account ID
+
+
+%dl
+  %dt
+    =@payment.state
+  %dd
+    State    
+
+%dl
+  %dt
+    =@payment.started_at
+  %dd
+    Started At
+        
+%dl
+  %dt
+    =@payment.completed_at
+  %dd
+    Completed At
+            
+%dl
+  %dt
+    =@payment.effective_at
+  %dd
+    Effective At
+
+
+    
+%table
+  %tr
+    %td
+      %th ID
+      %th Created At
+      %th From State
+      %th To State
+      %th Remote Transaction ID
+      %th Raw Response
+      %th Error
+  -@payment_events.each do |event|
+    %tr
+      %td
+        =event.id
+      %td 
+        =event.created_at
+      %td
+        =event.from_state
+      %td
+        =event.to_state
+      %td
+        =event.remote_transaction_id
+      %td
+        =event.raw_response
+      %td
+        =event.error.inspect

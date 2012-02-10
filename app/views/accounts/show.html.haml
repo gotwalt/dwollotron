@@ -1,0 +1,92 @@
+%h1
+  Account Details
+  
+%dl
+  %dt
+    =@account.id
+  %dd
+    ID
+    
+%dl
+  %dt
+    =@account.state
+  %dd Account State
+
+%dl
+  %dt
+    =@account.external_service_id
+  %dd
+    External Service ID
+        
+%dl
+  %dt
+    =@account.access_token
+  %dd
+    Access Token
+            
+%dl
+  %dt
+    =@account.pin
+  %dd
+    Pin
+    
+%dl
+  %dt
+    =@account.current_withdrawal.try(:day_of_month)
+  %dd
+    Current Withdrawal Day of Month
+    
+%dl
+  %dt
+    =number_to_currency @account.current_amount.try(:amount)
+  %dd
+    Current Withdrawal Amount
+    
+%ul.withdrawals
+  -@scheduled_withdrawals.each do |withdrawal|
+    %li
+      %dl
+        %dt
+          =withdrawal.day_of_month
+        %dd
+          Day of Month
+        %dd
+          ="Effective at #{withdrawal.effective_at}"
+
+%ul.amounts
+  -@scheduled_amounts.each do |amount|
+    %li
+      %dl
+        %dt
+          =number_to_currency amount.amount
+        %dd
+          Day of Month
+        %dd
+          ="Effective at #{amount.effective_at}"          
+          
+%table
+  %tr
+    %td
+      %th ID
+      %th Started At
+      %th Completed At
+      %th Effective At
+      %th State
+      %th
+  -@payments.each do |payment|
+    %tr
+      %td
+        =payment.id
+      %td 
+        =payment.started_at
+      %td
+        =payment.completed_at
+      %td
+        =payment.effective_at
+      %td
+        =payment.state
+      %td
+        %a.btn{href: payment_path(payment) }
+          Details
+          
+          
