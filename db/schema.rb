@@ -14,11 +14,14 @@
 ActiveRecord::Schema.define(:version => 20120203203822) do
 
   create_table "accounts", :force => true do |t|
-    t.string  "access_token",       :null => false
+    t.integer "external_service_id", :null => false
+    t.string  "access_token",        :null => false
     t.string  "pin"
     t.integer "current_payment_id"
     t.string  "state"
   end
+
+  add_index "accounts", ["external_service_id"], :name => "index_accounts_on_external_service_id"
 
   create_table "payment_events", :force => true do |t|
     t.integer  "payment_id"
