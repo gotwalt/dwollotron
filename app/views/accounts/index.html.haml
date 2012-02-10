@@ -1,6 +1,8 @@
 %h1
   Accounts
-
+%a.btn{:href => new_account_path}
+  Create New Account
+  
 %ul
   -@accounts.each do |account|
     %li

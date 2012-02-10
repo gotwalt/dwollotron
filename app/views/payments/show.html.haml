@@ -1,4 +1,6 @@
 %h1 Payment Details
+%h2
+  =link_to "Account Details", account_path(@payment.account)
 
 %dl
   %dt
@@ -34,8 +36,6 @@
     =@payment.effective_at
   %dd
     Effective At
-
-
     
 %table
   %tr

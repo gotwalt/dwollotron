@@ -1,0 +1,38 @@
+%h1 Create New Account
+
+-if flash[:error]
+  %h2.error
+    =flash[:error]
+    
+=form_for @account do |f|
+
+  %dl
+    %dt
+      =f.text_field :external_service_id
+    %dd
+      External Service ID
+
+  %dl
+    %dt
+      =f.text_field :access_token
+    %dd Oauth Token
+  
+  %dl
+    %dt
+      =f.text_field :pin
+    %dd Pin
+  
+    %dl
+      %dt
+        =text_field_tag :amount, 25
+      %dd
+        Scheduled Amount
+
+    %dl
+      %dt
+        =text_field_tag :day_of_month, 1
+      %dd
+        Scheduled Withdrawal Day of Month
+        
+
+  =f.submit
