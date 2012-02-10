@@ -9,7 +9,7 @@ describe AccountQueuer do
   
   it 'should find a transaction and start the processing' do
     account.should_receive(:queue)
-    AccountQueuer.perform
+    AccountQueuer.perform.should == 1
   end
   
 end
