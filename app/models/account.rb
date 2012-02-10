@@ -3,10 +3,12 @@ class Account < ActiveRecord::Base
   include DwollaAccount
   
   validates_presence_of :access_token
-  has_many :scheduled_amounts
-  has_many :scheduled_withdrawals
   
-  has_many :payments
+  has_many :scheduled_amounts, :dependent => :destroy
+  has_many :scheduled_withdrawals, :dependent => :destroy
+  has_many :payments, :dependent => :destroy
+  
+  accepts_nested_attributes_for :scheduled_amounts, :scheduled_withdrawals
   
   scope :waiting, where(:state => :waiting)
   
@@ -60,7 +62,7 @@ class Account < ActiveRecord::Base
   end
   
   def enqueue_payment(args = nil)
-    Resque.enqueue(PaymentProcessor, current_payment.id)
+    Resque.enqueue(PaymentProcessor, current_payment_id)
   end
   
   class InvalidStateError < StandardError

@@ -1,5 +1,10 @@
 Dwollotron::Application.routes.draw do
-  resources :accounts, :only => [:index, :show]
+  resources :accounts do
+    member do
+      post 'queue'
+      post 'cancel_current_payment'
+    end
+  end
   resources :payments, :only => [:show]
-  root :to => 'accounts#index'
+  root :to => 'welcome#index'
 end

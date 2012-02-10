@@ -88,5 +88,11 @@
       %td
         %a.btn{href: payment_path(payment) }
           Details
-          
+
+-if @account.state == 'waiting'
+  =button_to "Queue", :action => :queue
+-else
+  =button_to "Cancel Current Payment", :action => :cancel_current_payment
+  
+=button_to "Delete", account_path(@account), :confirm => "ORLY?", :method => :delete
           
