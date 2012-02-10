@@ -8,6 +8,8 @@ class Account < ActiveRecord::Base
   
   has_many :payments
   
+  scope :waiting, where(:state => :waiting)
+  
   def current_amount
     scheduled_amount_at Time.now
   end
