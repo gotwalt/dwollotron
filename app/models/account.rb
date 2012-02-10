@@ -1,5 +1,6 @@
 class Account < ActiveRecord::Base
   include AccountStateMachine
+  include DwollaAccount
   
   validates_presence_of :access_token
   has_many :scheduled_amounts
