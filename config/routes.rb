@@ -5,6 +5,6 @@ Dwollotron::Application.routes.draw do
       post 'cancel_current_payment'
     end
   end
-  resources :payments, :only => [:show]
-  root :to => 'welcome#index'
+  resources :payments, only: [:show]
+  root to: 'welcome#index'
 end
