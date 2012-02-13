@@ -1,11 +1,19 @@
+%ul.breadcrumb
+  %li
+    =link_to "Accounts", accounts_path()
+    %span.divider
+      \/
+  %li.active
+    %a{:href=>"#"}
+      Account
 .pull-right
-  =button_to "Delete Account", account_path(@account), :confirm => "ORLY?", :method => :delete,:class=>"btn btn-danger"
+  =button_to "Delete Account", account_path(@account), :confirm => "ORLY?", :method => :delete,:class=>"btn btn-danger btn-large"
 %h1
   Account
 
 .tabbable{:style=>"margin-top: 20px"}
   %ul.nav.nav-tabs
-    %li
+    %li.active
       %a{:href=>"#details",:data=>{:toggle=>"tab"}}
         Details
     %li
@@ -133,4 +141,7 @@
                 =button_to "Queue Payment", {:action => :queue}, {:class => "btn btn-primary"}
               -else
                 =button_to "Cancel Current Payment", {:action => :cancel_current_payment}, {:class=>"btn btn-danger"}
-          
+:javascript
+  $(function () {
+    $('.nav-tabs a:first').tab('show')
+  })
