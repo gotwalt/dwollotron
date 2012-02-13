@@ -1,98 +1,136 @@
+.pull-right
+  =button_to "Delete Account", account_path(@account), :confirm => "ORLY?", :method => :delete,:class=>"btn btn-danger"
 %h1
-  Account Details
-  
-%dl
-  %dt
-    =@account.id
-  %dd
-    ID
-    
-%dl
-  %dt
-    =@account.state
-  %dd Account State
+  Account
 
-%dl
-  %dt
-    =@account.external_service_id
-  %dd
-    External Service ID
-        
-%dl
-  %dt
-    =@account.access_token
-  %dd
-    Access Token
-            
-%dl
-  %dt
-    =@account.pin
-  %dd
-    Pin
-    
-%dl
-  %dt
-    =@account.current_withdrawal.try(:day_of_month)
-  %dd
-    Current Withdrawal Day of Month
-    
-%dl
-  %dt
-    =number_to_currency @account.current_amount.try(:amount)
-  %dd
-    Current Withdrawal Amount
-    
-%ul.withdrawals
-  -@scheduled_withdrawals.each do |withdrawal|
+.tabbable{:style=>"margin-top: 20px"}
+  %ul.nav.nav-tabs
     %li
-      %dl
-        %dt
-          =withdrawal.day_of_month
-        %dd
-          Day of Month
-        %dd
-          ="Effective at #{withdrawal.effective_at}"
-
-%ul.amounts
-  -@scheduled_amounts.each do |amount|
+      %a{:href=>"#details",:data=>{:toggle=>"tab"}}
+        Details
     %li
-      %dl
-        %dt
-          =number_to_currency amount.amount
-        %dd
-          Day of Month
-        %dd
-          ="Effective at #{amount.effective_at}"          
-          
-%table
-  %tr
-    %td
-      %th ID
-      %th Started At
-      %th Completed At
-      %th Effective At
-      %th State
-      %th
-  -@payments.each do |payment|
-    %tr
-      %td
-        =payment.id
-      %td 
-        =payment.started_at
-      %td
-        =payment.completed_at
-      %td
-        =payment.effective_at
-      %td
-        =payment.state
-      %td
-        %a.btn{href: payment_path(payment) }
-          Details
+      %a{:href=>"#payments",:data=>{:toggle=>"tab"}}
+        Payments
+  .tab-content
+    #details.tab-pane.active
+      %form.form-horizontal
+        %fieldset
+          .control-group
+            %label
+              ID
+            .controls
+              %span{:class=>"uneditable-input"}
+                =@account.id
+          .control-group
+            %label
+              Account State
+            .controls
+              %span{:class=>"uneditable-input"}
+                =@account.state
+          .control-group
+            %label
+              External Service ID
+            .controls
+              %span{:class=>"uneditable-input"}
+                =@account.external_service_id
+          .control-group
+            %label
+              Access Token
+            .controls
+              %span{:class=>"uneditable-input"}
+                =@account.access_token
+          .control-group
+            %label
+              Pin
+            .controls
+              %span{:class=>"uneditable-input"}
+                =@account.pin
+          .control-group
+            %label
+              Withdrawal day
+            .controls
+              %span{:class=>"uneditable-input"}
+                =@account.current_withdrawal.try(:day_of_month)
+          .control-group
+            %label
+              Withdrawal Amount
+            .controls
+              %span{:class=>"uneditable-input"}
+                =number_to_currency @account.current_amount.try(:amount)
+          .control-group
+            %label
+              Pin
+            .controls
+              %span{:class=>"uneditable-input"}
+                =@account.pin
 
--if @account.state == 'waiting'
-  =button_to "Queue", :action => :queue
--else
-  =button_to "Cancel Current Payment", :action => :cancel_current_payment
-  
-=button_to "Delete", account_path(@account), :confirm => "ORLY?", :method => :delete
+          .control-group
+            %label
+              Scheduled Withdrawals
+            .controls
+              %table.table.table-striped.table-bordered.table-condensed
+                %thead
+                  %tr
+                    %th{:style=>"width:33%"}
+                      Day of Month
+                    %th
+                      Effective
+                %tbody
+                  -@scheduled_withdrawals.each do |withdrawal|
+                    %tr
+                      %td
+                        =withdrawal.day_of_month
+                      %td
+                        =withdrawal.effective_at
+          .control-group
+            %label
+              Scheduled Amounts
+            .controls
+              %table.table.table-striped.table-bordered.table-condensed
+                %thead
+                  %tr
+                    %th{:style=>"width:33%"}
+                      Amount
+                    %th
+                      Effective
+                %tbody
+                  -@scheduled_amounts.each do |amount|
+                    %tr
+                      %td
+                        =number_to_currency amount.amount
+                      %td
+                        =amount.effective_at
+    #payments.tab-pane
+      %table.table.table-striped.table-bordered
+        %thead
+          %tr
+            %th ID
+            %th Started At
+            %th Completed At
+            %th Effective At
+            %th State
+            %th
+        %tbody
+          -@payments.each do |payment|
+            %tr
+              %td
+                =payment.id
+              %td 
+                =payment.started_at
+              %td
+                =payment.completed_at
+              %td
+                =payment.effective_at
+              %td
+                =payment.state
+              %td
+                %a.btn.btn-small{href: payment_path(payment) }
+                  Details
+        %tfoot
+          %tr
+            %td{:colspan => "6"}
+              -if @account.state == 'waiting'
+                =button_to "Queue Payment", {:action => :queue}, {:class => "btn btn-primary"}
+              -else
+                =button_to "Cancel Current Payment", {:action => :cancel_current_payment}, {:class=>"btn btn-danger"}
           
