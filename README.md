@@ -6,14 +6,14 @@ Dwollotron is a Rails 3.1 app with daemons for recurrence and the state_machine 
 * RVM
 * ruby-1.9.3
 * Postgres
-* Memcached
+* Redis
 
 ##Getting Started
 1. Clone the repo.
 1. Enter the directory, and allow RVM to create the new gemset.
 1. Update your bundle with `bundle update`.
 1. Create the database with `rake db:create` followed by `rake db:migrate`.
-1. Launch the app with `rails s`.
+1. Launch the app with `foreman start`. The web application will run at http://localhost:5000, and both the queue processor and the scheduler will run.
 
 ##Testing
 For one-time testing, run `rspec`. For continual testing, run `autotest`.
