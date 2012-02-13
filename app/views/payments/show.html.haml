@@ -1,45 +1,57 @@
-%h1 Payment Details
-%h2
-  =link_to "Account Details", account_path(@payment.account)
+%ul.breadcrumb
+  %li
+    =link_to "Account", account_path(@payment.account)
+    %span.divider
+      \/
+  %li.active
+    %a{:href=>"#"}
+      Payment Details
+%h1 
+  Payment Details
+  
+  
+%form.form-horizontal{:style=>"margin-top: 20px"}
+  %fieldset
+    .control-group
+      %label
+        Payment ID
+      .controls
+        %span{:class=>"uneditable-input"}
+          =@payment.id
+    .control-group
+      %label
+        Account ID
+      .controls
+        %span{:class=>"uneditable-input"}
+          =@payment.account.id
+    .control-group
+      %label
+        State
+      .controls
+        %span{:class=>"uneditable-input"}
+          =@payment.state
+    .control-group
+      %label
+        Started at
+      .controls
+        %span{:class=>"uneditable-input"}
+          =@payment.started_at
+    .control-group
+      %label
+        Completed at
+      .controls
+        %span{:class=>"uneditable-input"}
+          =@payment.completed_at
+    .control-group
+      %label
+        Effective at
+      .controls
+        %span{:class=>"uneditable-input"}
+          =@payment.effective_at
 
-%dl
-  %dt
-    =@payment.id
-  %dd ID
-
-%dl
-  %dt
-    =@payment.account.id
-  %dd Account ID
-
-
-%dl
-  %dt
-    =@payment.state
-  %dd
-    State    
-
-%dl
-  %dt
-    =@payment.started_at
-  %dd
-    Started At
-        
-%dl
-  %dt
-    =@payment.completed_at
-  %dd
-    Completed At
-            
-%dl
-  %dt
-    =@payment.effective_at
-  %dd
-    Effective At
-    
-%table
-  %tr
-    %td
+%table.table.table-bordered
+  %thead
+    %tr
       %th ID
       %th Created At
       %th From State
@@ -47,19 +59,20 @@
       %th Remote Transaction ID
       %th Raw Response
       %th Error
-  -@payment_events.each do |event|
-    %tr
-      %td
-        =event.id
-      %td 
-        =event.created_at
-      %td
-        =event.from_state
-      %td
-        =event.to_state
-      %td
-        =event.remote_transaction_id
-      %td
-        =event.raw_response
-      %td
-        =event.error.inspect
+  %tbody
+    -@payment_events.each do |event|
+      %tr
+        %td
+          =event.id
+        %td 
+          =event.created_at
+        %td
+          =event.from_state
+        %td
+          =event.to_state
+        %td
+          =event.remote_transaction_id
+        %td
+          =event.raw_response
+        %td
+          =event.error.inspect
