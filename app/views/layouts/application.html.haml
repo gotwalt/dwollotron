@@ -9,4 +9,10 @@
   =stylesheet_link_tag "application", :media => "all"
     
 %body
-  =yield
+  %header.navbar.navbar-fixed-top
+    .navbar-inner
+      .container
+        %a.brand{:href=>"/"}
+          Dwollatron
+  .container
+    =yield
