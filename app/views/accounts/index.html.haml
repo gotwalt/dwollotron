@@ -1,13 +1,22 @@
-%a.btn.btn-primary.btn-large{:href => new_account_path}
+%a.btn.btn-primary.btn-large.pull-right{:href => new_account_path}
+  %i.icon-plus
   Create New Account
-  
-%ul
+%h1
+  Accounts
+%table.table.table-bordered{:style=>"margin-top: 20px"}
+  %thead
+    %tr
+      %th
+        Account ID
+      %th
+        External Service ID
+      %th
   -@accounts.each do |account|
-    %li
-      %dl
-        %dt
-          =account.id
-        %dd.external_service_id
-          =account.external_service_id
-      %a.btn-primary{href: account_path(account) }
-        Details
+    %tr
+      %td
+        =account.id
+      %td
+        =account.external_service_id
+      %td
+        %a.btn{href: account_path(account) }
+          Details
