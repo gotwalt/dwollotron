@@ -4,3 +4,33 @@
 @import "twitter/bootstrap/responsive";
 
 // Your custom stylesheets goes here (override Less here)
+body {
+  padding-top: @navbarHeight * 1.5
+}
+.container {
+}
+// Landscape phones and down
+@media (max-width: 480px) {
+  body {
+    padding-top: 0
+  }
+}
+ 
+// Landscape phone to portrait tablet
+@media (max-width: 768px) {
+  body {
+    padding-top: 0
+  }
+}
+
+// Portrait tablet to landscape and desktop
+@media (min-width: 768px) and (max-width: 980px) {
+  body {
+    padding-top: 0
+  }
+}
+
+// Large desktop
+@media (min-width: 1200px) {
+
+}
