@@ -6,5 +6,5 @@ Dwollotron::Application.routes.draw do
     end
   end
   resources :payments, only: [:show]
-  root to: 'welcome#index'
+  root to: redirect("/accounts")
 end
