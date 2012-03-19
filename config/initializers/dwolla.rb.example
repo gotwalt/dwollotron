@@ -1,0 +1,7 @@
+Dwollotron::Application.configure do
+  c = Struct.new(:key, :secret, :account)
+  config.dwolla = c.new
+  config.dwolla.key = "your key"
+  config.dwolla.secret = "your secret"
+  config.dwolla.account = "867-5309"
+end
