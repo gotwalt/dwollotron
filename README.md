@@ -16,6 +16,9 @@ Dwollotron is a Rails 3.1 app with daemons for recurrence and the state_machine 
 1. Create the database with `rake db:create` followed by `rake db:migrate`.
 1. Launch the app with `foreman start`. The web application will run at http://localhost:5000, and both the queue processor and the scheduler will run.
 
+##Making it Useful
+Rewrite `app/models/payment.rb#call_remote_dwolla_api` to do something that actually calls an API to transfer money. That part's not done.
+
 ##Testing
 For one-time testing, run `rspec`. For continual testing, run `autotest`.
 
